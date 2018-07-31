@@ -12,8 +12,10 @@
     <article class="prediction">
       <header>
         <div>
-          <h1>{{ prediction['prediction_value'] }}</h1>
-          <div class="about">by {{ prediction['username'] }} on {{ prediction['created'].strftime('%Y-%m-%d') }}</div>
+            <p><b>Predicted value: {{ prediction['prediction_value'] }}</b></p>
+            <p class="body">Input variables: {{ prediction['prediction_input'] }}</p>
+            <p class="about"><i>by {{ prediction['username'] }} on {{ prediction['created'].strftime('%Y-%m-%d
+                %H:%M:%S') }}</i></p>
         </div>
         {% if g.user['id'] == prediction['user_id'] %}
           <form action="{{ url_for('predict.delete', id=prediction['id']) }}" method="post">
@@ -21,7 +23,6 @@
           </form>
         {% endif %}
       </header>
-      <p class="body">{{ prediction['prediction_input'] }}</p>
     </article>
     {% if not loop.last %}
       <hr>
