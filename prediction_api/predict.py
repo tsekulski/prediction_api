@@ -23,21 +23,25 @@ def index():
 @login_required
 def generate():
     if request.method == 'POST':
-        var_1 = request.form['var_1']
-        var_2 = request.form['var_2']
+        var_1 = float(request.form['var_1'])
+        var_2 = float(request.form['var_2'])
+        var_3 = float(request.form['var_3'])
         error = None
 
-        if not (var_1 and var_2):
+        if not (var_1 and var_2 and var_3):
             error = 'all "variable" fields are required.'
 
         if error is not None:
             flash(error)
         else:
+            input_variables = [var_1, var_2, var_3]
+            predicted_value = generate_prediction(input_variables)
             db = get_db()
             db.execute(
                 'INSERT INTO predictions (prediction_value, prediction_input, user_id)'
                 ' VALUES (?, ?, ?)',
-                (var_1, var_2, g.user['id'])
+                (predicted_value, ' '.join(str(e) for e in input_variables), g.user['id'])
+                # input_variables must be converted to string before inserting into db
             )
             db.commit()
             return redirect(url_for('predict.index'))
@@ -71,3 +75,11 @@ def delete(id):
     db.commit()
     return redirect(url_for('predict.index'))
 
+
+def generate_prediction(input_variables):
+    predicted_value = 0
+
+    for variable in input_variables:
+        predicted_value += variable
+
+    return predicted_value
