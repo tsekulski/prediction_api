@@ -16,7 +16,9 @@
           <div class="about">by {{ prediction['username'] }} on {{ prediction['created'].strftime('%Y-%m-%d') }}</div>
         </div>
         {% if g.user['id'] == prediction['user_id'] %}
-          <a class="action" href="{{ url_for('predict.delete', id=prediction['id']) }}">Delete</a>
+          <form action="{{ url_for('predict.delete', id=prediction['id']) }}" method="post">
+              <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+          </form>
         {% endif %}
       </header>
       <p class="body">{{ prediction['prediction_input'] }}</p>
@@ -26,3 +28,5 @@
     {% endif %}
   {% endfor %}
 {% endblock %}
+
+
