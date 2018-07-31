@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Prediction{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="var_1">var_1</label>
+    <input name="var_1" id="var_1" value="{{ request.form['var_1'] }}" required>
+    <label for="var_2">var_2</label>
+    <input name="var_2" id="var_2" value="{{ request.form['var_2'] }}" required>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}
