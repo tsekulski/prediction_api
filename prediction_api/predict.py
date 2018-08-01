@@ -39,28 +39,27 @@ def generate():
         if error is not None:
             flash(error)
         else:
-           # input_variables = [var_1, var_2, var_3]
-            #predicted_value = generate_prediction(input_variables)
-            #db = get_db()
-            #db.execute(
-            #    'INSERT INTO predictions (prediction_value, prediction_input, user_id)'
-            #    ' VALUES (?, ?, ?)',
-            #    (predicted_value, ' '.join(str(e) for e in input_variables), g.user['id'])
-            #    # input_variables must be converted to string before inserting into db
-            #)
-            #db.commit()
-
             col_names = ['var_1', 'var_2', 'var_3']
             input_variables =  [[var_1], [var_2], [var_3]]
             zipped = list(zip(col_names, input_variables))
             prediction_data = dict(zipped)
 
-            #return redirect(url_for('predict.predict_from_json'))
+            server_response = requests.post(url_for('predict.predict_from_json', _external=True), json=prediction_data)
+            # _external=True keyword needed to generate absolute URL which is needed by requests module
 
-            res = requests.post('http://127.0.0.1:5000/predict_from_json', json=prediction_data)
-            return(res.json)
+            predicted_value = server_response.json()[0] # taking first value from json response list
 
-            #return redirect(url_for('predict.index'))
+            db = get_db()
+            db.execute(
+                'INSERT INTO predictions (prediction_value, prediction_input, user_id)'
+                'VALUES (?, ?, ?)',
+                #(predicted_value, ' '.join(str(e) for e in input_variables), g.user['id'])
+                (predicted_value, json.dumps(prediction_data), g.user['id'])
+                # input_variables must be converted to string before inserting into db, json.dumps achieves that
+            )
+            db.commit()
+
+            return redirect(url_for('predict.index'))
 
     return render_template('predict/generate.html')
 
