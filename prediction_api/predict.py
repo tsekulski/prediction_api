@@ -33,19 +33,21 @@ def index():
 @login_required
 def generate():
     if request.method == 'POST':
-        var_1 = float(request.form['var_1'])
-        var_2 = float(request.form['var_2'])
-        var_3 = float(request.form['var_3'])
+        mean_radius = float(request.form['mean_radius'])
+        mean_texture = float(request.form['mean_texture'])
+        mean_perimeter = float(request.form['mean_perimeter'])
+        mean_area = float(request.form['mean_area'])
+        mean_smoothness = float(request.form['mean_smoothness'])
         error = None
 
-        if not (var_1 and var_2 and var_3):
+        if not (mean_radius and mean_texture and mean_perimeter and mean_area and mean_smoothness):
             error = 'all "variable" fields are required.'
 
         if error is not None:
             flash(error)
         else:
-            col_names = ['var_1', 'var_2', 'var_3']
-            input_variables =  [[var_1], [var_2], [var_3]]
+            col_names = ['mean_radius', 'mean_texture', 'mean_perimeter', 'mean_area', 'mean_smoothness']
+            input_variables =  [[mean_radius], [mean_texture], [mean_perimeter], [mean_area], [mean_smoothness]]
             zipped = list(zip(col_names, input_variables))
             prediction_data = dict(zipped)
 
@@ -115,6 +117,7 @@ def predict_from_json():
      #joblib.dump(json_, 'test_dump.pkl')
 
      query_df = pd.DataFrame(json_, columns=json_.keys())
+     # !!! the above makes sure column order is kept. mixing up row order needs to be tested as well !!!
 
      #prediction = query_df.sum(axis=1).values
      prediction = model.predict_proba(query_df)[:,1]

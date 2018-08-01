@@ -6,14 +6,20 @@
 
 {% block content %}
   <form method="post">
-      <label for="var_1">var_1</label>
-      <input name="var_1" id="var_1" value="{{ request.form['var_1'] }}" required>
+      <label for="mean_radius">mean_radius</label>
+      <input name="mean_radius" id="mean_radius" value="{{ request.form['mean_radius'] }}" required>
 
-      <label for="var_2">var_2</label>
-      <input name="var_2" id="var_2" value="{{ request.form['var_2'] }}" required>
+      <label for="mean_texture">mean_texture</label>
+      <input name="mean_texture" id="mean_texture" value="{{ request.form['mean_texture'] }}" required>
 
-      <label for="var_3">var_3</label>
-      <input name="var_3" id="var_3" value="{{ request.form['var_3'] }}" required>
+      <label for="mean_perimeter">mean_perimeter</label>
+      <input name="mean_perimeter" id="mean_perimeter" value="{{ request.form['mean_perimeter'] }}" required>
+
+      <label for="mean_area">mean_area</label>
+      <input name="mean_area" id="mean_area" value="{{ request.form['mean_area'] }}" required>
+
+      <label for="mean_smoothness">mean_smoothness</label>
+      <input name="mean_smoothness" id="mean_smoothness" value="{{ request.form['mean_smoothness'] }}" required>
 
       <input type="submit" value="Submit">
   </form>
