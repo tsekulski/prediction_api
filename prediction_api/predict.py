@@ -11,6 +11,11 @@ import requests
 import pandas as pd
 import numpy as np
 
+from sklearn.preprocessing import Imputer, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.externals import joblib
+
+
 bp = Blueprint('predict', __name__)
 
 @bp.route('/')
@@ -103,14 +108,17 @@ def generate_prediction(input_variables):
 @bp.route('/predict_from_json', methods=['POST'])
 #@login_required
 def predict_from_json():
-     json_ = request.json
+     json_ = request.json  # this loads json data into a dict called json_
+     model = joblib.load('wisconsin_model.pkl')
+     #model_columns = joblib.load('wisconsin_col_names.pkl')
 
-     #loaded_dict = json.loads(json_)
+     #joblib.dump(json_, 'test_dump.pkl')
 
      query_df = pd.DataFrame(json_, columns=json_.keys())
 
-     prediction = query_df.sum(axis=1).values
-     #prediction = np.array([2, 3])
+     #prediction = query_df.sum(axis=1).values
+     prediction = model.predict_proba(query_df)[:,1]
+     #prediction = query_df.to_dict()
 
      #query_df = pd.DataFrame(json_)
      #query = pd.get_dummies(query_df)
@@ -118,3 +126,4 @@ def predict_from_json():
      #return jsonify({'prediction': list(prediction)})
 
      return jsonify(prediction.tolist())
+     #return jsonify(prediction)
